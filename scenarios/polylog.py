@@ -50,6 +50,6 @@ def log_polylog(turn: PTurn):
             'user_id': m.user_id,
             'time': datetime.now(),
             'text': m.text,
-            'reply_message': mdata.get('reply_message'),
+            'reply_id': (mdata.get('reply_message') or {}).get('id'),
             'id': mdata.get('id'),
         })
