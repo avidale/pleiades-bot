@@ -17,7 +17,7 @@ class Reminder:
         new_forms = 0
         for u in users:
             dt = u.get('last_time')
-            if dt is not None and dt > str(now - timedelta(hours=1)):
+            if dt is not None and dt > str(now - timedelta(hours=12)):
                 continue
 
             uid = u['key'].lstrip('vk__')

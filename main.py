@@ -8,7 +8,8 @@ import dialogic
 from core.dm import make_dm
 from core.reminder import REMINDER
 from misc.vk import VA
-from scenarios import *
+from scenarios import *  # noqa
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 if os.getenv('SENTRY_DSN', None) is not None:
@@ -58,6 +59,10 @@ app = server.app
 REMINDER.bot = server.vk_bot
 REMINDER.users_collection = users_collection
 
+scheduler = BackgroundScheduler()
+scheduler.add_job(REMINDER.iterate_users, 'interval', hours=24)
+
 
 if __name__ == '__main__':
+    scheduler.start()
     server.parse_args_and_run()
