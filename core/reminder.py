@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta
 from typing import Optional, Dict
 
@@ -12,8 +13,8 @@ class Reminder:
     def iterate_users(self) -> Dict:
         users = list(self.users_collection.find({}))
         now = datetime.now()
-        half_forms = None
-        new_forms = None
+        half_forms = 0
+        new_forms = 0
         for u in users:
             dt = u.get('last_time')
             if dt is not None and dt > str(now - timedelta(hours=1)):
@@ -58,6 +59,7 @@ class Reminder:
             text=text,
             keyboard=keyboard,
         )
+        time.sleep(0.1)
 
 
 REMINDER = Reminder()
