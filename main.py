@@ -5,7 +5,8 @@ import sentry_sdk
 import dialogic
 
 
-from core.dm import FFDM, make_dm
+from core.dm import make_dm
+from core.reminder import REMINDER
 from misc.vk import VA
 from scenarios import *
 
@@ -21,6 +22,7 @@ if os.environ.get('MONGODB_URI'):
     db = dialogic.storage.database_utils.get_mongo_or_mock()
     forms_collection = db.get_collection('forms')
     polylogs_collection = db.get_collection('polylogs')
+    users_collection = db.get_collection('sessions')
     storage = dialogic.session_storage.MongoBasedStorage(database=db)
     log_storage = dialogic.storage.message_logging.MongoMessageLogger(database=db, detect_pings=True)
 else:
@@ -28,6 +30,7 @@ else:
     log_storage = None
     forms_collection = None
     polylogs_collection = None
+    users_collection = None
 
 
 manager = make_dm(
@@ -51,6 +54,9 @@ connector.adapters[dialogic.SOURCES.VK] = VA(
 handler = connector.serverless_alice_handler
 server = dialogic.server.flask_server.FlaskServer(connector=connector)
 app = server.app
+
+REMINDER.bot = server.vk_bot
+REMINDER.users_collection = users_collection
 
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
 import copy
+import os
 from datetime import datetime
 
 import dialogic
@@ -34,6 +35,7 @@ class PleyadeDM(TurnDialogManager):
 
     def postprocess_response(self, response: Response, turn: PTurn):
         response.no_response = turn.no_response
+        response.updated_user_object['last_time'] = str(datetime.now())
         # todo: add filename to response
 
 
@@ -56,9 +58,11 @@ class FFDM(dialogic.dialog_manager.FormFillingDialogManager):
         )
 
 
+forms_root = 'data/forms'
+
 form_dms = [
-    FFDM('data/forms/form1.yaml'),
-    FFDM('data/forms/form2.yaml'),
+    FFDM(os.path.join(forms_root, fn))
+    for fn in os.listdir(forms_root)
 ]
 
 

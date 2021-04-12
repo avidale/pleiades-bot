@@ -9,7 +9,7 @@ import pandas as pd
 from collections import defaultdict
 
 
-def do_hash(s, salt='uid_'):
+def do_hash(s, salt=os.environ.get('HASH_SALT') or 'uid_'):
     return md5(f'{salt}_{s}'.encode()).hexdigest()
 
 
