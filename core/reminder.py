@@ -61,5 +61,14 @@ class Reminder:
         )
         time.sleep(0.1)
 
+    def send_to_everyone(self, text):
+        users = list(self.users_collection.find({}))
+        for u in users:
+            uid = u['key'].lstrip('vk__')
+            if not uid.isdigit():
+                continue
+            self.remind(user_id=uid, text=text)
+        return len(users)
+
 
 REMINDER = Reminder()
