@@ -17,8 +17,11 @@ class Reminder:
         new_forms = 0
         for u in users:
             dt = u.get('last_time')
-            if dt is not None and dt > str(now - timedelta(hours=12)):
-                continue
+            if dt is not None:
+                if dt > str(now - timedelta(hours=12)):
+                    continue  # too early to remind
+                if dt < str(now - timedelta(days=10)):
+                    continue  # too late to remind
 
             uid = u['key'].lstrip('vk__')
             if not uid.isdigit():
